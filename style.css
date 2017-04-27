@@ -22,13 +22,13 @@ html, body {
  height: 100%;
  overflow-x: hidden;
  background-size: cover;
- background: url('https://s-media-cache-ak0.pinimg.com/564x/ee/65/e7/ee65e7c8763f2f4c7b1a1470fb48a339.jpg') no-repeat center fixed;
+ background: url('https://unsplash.it/414/736/?random') no-repeat center fixed;
  padding-top: 30px;
 }
 
 @media only screen and (min-width: 500px) {
   #app {
-      background: url('http://hdwidescreenwallpapers.com/wp-content/uploads/2013/11/landscape-hd-wallpapers-1080p.jpg') no-repeat center fixed;
+      background: url('https://unsplash.it/1920/1080/?random') no-repeat center fixed;
       background-size: cover;
   }
 }
