@@ -13,7 +13,7 @@ html, body {
   border-style: solid;
   border-width: 2px;
   border-color: rgba(255, 205, 115, 0.7);
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.90);
   display: flex;
 }
 
@@ -24,6 +24,12 @@ html, body {
  background-size: cover;
  background: url('https://unsplash.it/414/736/?random') no-repeat center fixed;
  padding-top: 30px;
+}
+
+@media only screen and (max-width: 500px) {
+  input[type=text] {
+     font-size: 1.2em
+  }
 }
 
 @media only screen and (min-width: 500px) {
@@ -64,10 +70,21 @@ h1 {
     padding-left: 1%
 }
 
+h2 {
+    color: #111;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 20px;
+    text-align: left;
+    padding-left: 10px;
+    margin : 0;
+}
+
 h3 {
     color: #111;
     font-family: 'Open Sans',sans-serif;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 300;
     line-height: 32px;
     text-align: left;
@@ -117,8 +134,18 @@ input[type=text]:focus {
 .day {
   width: 30%
 }
+
+ .summary {
+   width: 35%;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+ }
+
 .degrees{
-  width: 70%;
+  width: 35%;
   display: flex;
   flex-direction: column;
+  margin-left: -10%;
+  justify-content: center;
 }
