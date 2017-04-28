@@ -2,6 +2,7 @@
   const DARKSKY_API_URL = 'https://api.darksky.net/forecast/';
   const DARKSKY_API_KEY = '8cf6a54d8de9c0cb77dae5efd6ce1383';
   const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+  const BING_NEWS_API= '7d6fc5eaddd04355ba97c8f8a06c6add ';
 
   const GOOGLE_MAPS_API_KEY = 'AIzaSyArY-l-IItGJ6vzulp5bxn1eelLesCAxEQ';
   const GOOGLE_MAPS_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
@@ -12,15 +13,34 @@
     return (
       fetch(url)
       .then(response => response.json())
-      .then(data => [data.currently,
-                     data.daily.data[0],
-                     data.daily.data[1],
-                     data.daily.data[2],
-                     data.daily.data[3],
-                     data.daily.data[4]
-       ])
-    );
+      .then(data => ({
+        current: data.currently,
+        summary: data.daily.summary,
+        future: [
+          data.daily.data[1],
+          data.daily.data[2],
+          data.daily.data[3],
+          data.daily.data[4],
+          data.daily.data[5]
+        ]
+      })
+    ))
   }
+
+
+
+  let forecastToHtml = (forecast) => (
+    `<div class="seperation">
+      <div class="day">
+        <p> ${transform[new Date(forecast.time * 1000).getDay()]} </p>
+      </div>
+      <div class="degrees">
+        ${transform[forecast.icon]}
+        <h3>Min: ${forecast.temperatureMin}°C <br> Max: ${forecast.temperatureMax}°C</h3>
+      </div>
+      <div class="summary"><h2>${forecast.summary}</h2></div>
+    </div>`
+  )
 
 
 
@@ -51,47 +71,34 @@
   transform['cloudy'] = `<img src="icons/hurricane.svg" style="width:50px">`
   transform['partly-cloudy-day'] = `<img src="icons/cloudy-day.svg" style="width:50px">`
   transform['partly-cloudy-night'] = `<img src="icons/rain.svg" style="width:50px">`
-  transform[0] = `Monday`
-  transform[1] = `Tuesday`
-  transform[2] = `Wednesday`
-  transform[3] = `Thursday`
-  transform[4] = `Friday`
-  transform[5] = `Saturday`
-  transform[6] = `Sunday`
+  transform[0] = `Sunday`
+  transform[1] = `Monday`
+  transform[2] = `Tuesday`
+  transform[3] = `Wednesday`
+  transform[4] = `Thursday`
+  transform[5] = `Friday`
+  transform[6] = `Saturday`
+
 
   cityForm.addEventListener('submit', function(event) {
     event.preventDefault(); // prevent the form from submitting
 
     var city = cityInput.value;
-    cityWeather.innerText = 'loading'
+    cityWeather.innerHTML = '<img src="icons/hurricane.svg" style="width:50px">'
     getCoordinatesForCity(city)
     .then(getWeather)
     .then(weather => {
-      console.log (weather)
-      date = [ new Date(weather[0].time * 1000), new Date(weather[1].time * 1000)]
-      console.log(transform[new Date(weather[0].time * 1000).getDay()])
       cityWeather.innerHTML = `
           <div class="seperation">
           <div class="day"><p>today</p></div>
-            <div class="degrees"> ${transform[weather[0].icon]}<h3> Currently: ${weather[0].temperature} °C</h3></div>
+            <div class="degrees"> ${transform[weather.current.icon]}<h3> Currently: ${weather.current.temperature} °C </h3>
+            </div>
+          <div class="summary"><h2>${weather.summary}</h2></div>
           </div>
-          <div class="seperation">
-        <div class="day"><p>${transform[new Date(weather[1].time * 1000).getDay()]}</p></div>
-            <div class="degrees">${transform[weather[1].icon]}<h3>Min: ${weather[1].temperatureMin}°C <br> Max: ${weather[1].temperatureMax}°C</h3></div>
-          </div>
-          <div class="seperation">
-          <div class="day"><p>${transform[new Date(weather[2].time * 1000).getDay()]}</p></div>
-            <div class="degrees"> ${transform[weather[2].icon]}<h3>Min: ${weather[2].temperatureMin}°C <br> Max: ${weather[2].temperatureMax}°C</h3></div>
-          </div>
-          <div class="seperation">
-          <div class="day"><p>${transform[new Date(weather[3].time * 1000).getDay()]}</p></div>
-            <div class="degrees"> ${transform[weather[3].icon]}<h3>Min: ${weather[3].temperatureMin}°C <br> Max: ${weather[3].temperatureMax}°C</h3></div>
-          </div>
-          <div class="seperation">
-          <div class="day"><p>${transform[new Date(weather[4].time * 1000).getDay()]}</p></div>
-          <div class="degrees"> ${transform[weather[4].icon]}<h3>Min: ${weather[4].temperatureMin}°C <br> Max: ${weather[4].temperatureMax}°C</h3></div>
-          </div>
-             `;
+          <br>
+
+          ${weather.future.map(forecastToHtml)}
+            `;
     })
   });
 })();
